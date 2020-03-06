@@ -24,19 +24,32 @@ public class MainController {
 
     @PostMapping({ "", "/" })
     public ResponseEntity createUser(@RequestBody User user) throws URISyntaxException {
+        //cuanto es la cantidad de elementos que hay en la lista
         long count = users.stream().count();
 
+        //if ternary: evalua si la cantidad en la lista es mayor a cero
         User userFromList = (count > 0) ?
+                // en la instruccion true: de la lista saca el ultimo elemento insertado
+                // y lo retorna
                 users.stream().skip(count - 1).findFirst().orElse(null) :
+                // en la instruccion false: retorna un null
                 null;
 
+        //if ternary: para definir el nuevo id del usuario a insertar en la lista
         long id = (userFromList != null) ?
+                // en instruccion true: extrae el id del ultimo usuario
+                // le suma uno y retorna el nuevo valor
                 userFromList.getId() + 1 :
+                // en la instruccion false retorna uno directamente porque la lista esta vacia
                 1;
 
+        // asigno el id generado en el if ternary anterior al usuario que se quiere sacar
         user.setId(id);
+
+        //agrego el usuario nuevo a la lista
         users.add(user);
 
+        //retorno el response de la peticion POST
         return ResponseEntity
                 .created(new URI("/users/" + user.getId()))
                 .body(user);
