@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class MainController {
     }
 
     @PostMapping({ "", "/" })
-    public ResponseEntity createUser(@RequestBody User user) throws URISyntaxException {
+    public ResponseEntity createUser(@Valid @RequestBody User user) throws URISyntaxException {
         //cuanto es la cantidad de elementos que hay en la lista
         long count = users.stream().count();
 
@@ -81,7 +82,7 @@ public class MainController {
         if (userFromList != null) {
             httpStatus = HttpStatus.OK;
             userFromList.setName(user.getName());
-            userFromList.setLastNane(user.getLastNane());
+            userFromList.setLastName(user.getLastName());
             userFromList.setAge(user.getAge());
         } else {
             httpStatus = HttpStatus.NOT_FOUND;
